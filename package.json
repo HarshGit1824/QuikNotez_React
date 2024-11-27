@@ -18,7 +18,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "nodemon backend/index.js",
+    "server": "npx nodemon backend/index.js",
     "both": "concurrently \"npm run start\" \"npm run server\""
   },
   "eslintConfig": {
@@ -38,5 +38,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
   }
 }
