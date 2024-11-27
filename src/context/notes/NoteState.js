@@ -3,13 +3,40 @@ import NoteContext from "./noteContext";
 
 const NoteState = (props) => {
   const notesInitial = [
+    {
+      "_id": "673dff463a450c2a39587017",
+      "user": "673d7d11d9f5e07feee46d68",
+      "title": "My Title",
+      "description": "Please wake up early",
+      "tag": "personal",
+      "date": "2024-11-20T15:24:54.562Z",
+      "__v": 0
+    },
       {
-        "_id": "673dfe883a450c2a39587015",
+        "_id": "673dff463a450c2a39587017",
         "user": "673d7d11d9f5e07feee46d68",
-        "title": "New Note Updated",
-        "description": "Please access new note Updated",
+        "title": "My Title",
+        "description": "Please wake up early",
         "tag": "personal",
-        "date": "2024-11-20T15:21:44.568Z",
+        "date": "2024-11-20T15:24:54.562Z",
+        "__v": 0
+      },
+      {
+        "_id": "673dff473a450c2a39587019",
+        "user": "673d7d11d9f5e07feee46d68",
+        "title": "My Title",
+        "description": "Please wake up early",
+        "tag": "personal",
+        "date": "2024-11-20T15:24:55.461Z",
+        "__v": 0
+      },
+      {
+        "_id": "673dff463a450c2a39587017",
+        "user": "673d7d11d9f5e07feee46d68",
+        "title": "My Title",
+        "description": "Please wake up early",
+        "tag": "personal",
+        "date": "2024-11-20T15:24:54.562Z",
         "__v": 0
       },
       {
@@ -29,7 +56,25 @@ const NoteState = (props) => {
         "tag": "personal",
         "date": "2024-11-20T15:24:55.461Z",
         "__v": 0
-      }
+      },
+      {
+        "_id": "673dff463a450c2a39587017",
+        "user": "673d7d11d9f5e07feee46d68",
+        "title": "My Title",
+        "description": "Please wake up early",
+        "tag": "personal",
+        "date": "2024-11-20T15:24:54.562Z",
+        "__v": 0
+      },
+      {
+        "_id": "673dff463a450c2a39587017",
+        "user": "673d7d11d9f5e07feee46d68",
+        "title": "My Title",
+        "description": "Please wake up early",
+        "tag": "personal",
+        "date": "2024-11-20T15:24:54.562Z",
+        "__v": 0
+      },
     ]
 
     const [notes, setNotes] = useState(notesInitial);
