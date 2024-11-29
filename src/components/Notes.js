@@ -33,9 +33,10 @@ const Notes = () => {
 
   const handleClick = (e) => {
     e.preventDefault();
-    updateNote(note.id, note.title, note.description, note.tag); // Call updateNote instead of editNote
-    refClose.current.click(); // Close the modal after updating
+    updateNote(note.id, note.title, note.description, note.tag); // Calls updated function
+    refClose.current.click(); // Closes the modal after updating
   };
+  
 
   const onChange = (e) => {
     setNote({ ...note, [e.target.name]: e.target.value });

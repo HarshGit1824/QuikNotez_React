@@ -37,6 +37,9 @@ const NoteState = (props) => {
       body: JSON.stringify({ title, description, tag }),
     });
 
+    const json = await responce.json();
+    console.log(json);
+
     console.log("Adding a new note");
     const note = {
       _id: "673df1f463a450c2a39587017",
@@ -74,36 +77,34 @@ const NoteState = (props) => {
   // MARK: UPDATE a Note
   const updateNote = async (id, title, description, tag) => {
     // API Call
-    const updateNote = async (id, title, description, tag) => {
+    try {
       const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
-        method: "PUT", // Use PUT for updating
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjczZDdkMTFkOWY1ZTA3ZmVlZTQ2ZDY4In0sImlhdCI6MTczMjExMTIwM30.PjqMu34sNQJwoLl4G3AzzlCZTcQ0aHhMdSqf0WV62tU",
+          "auth-token":
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjczZDdkMTFkOWY1ZTA3ZmVlZTQ2ZDY4In0sImlhdCI6MTczMjExMTIwM30.PjqMu34sNQJwoLl4G3AzzlCZTcQ0aHhMdSqf0WV62tU",
         },
         body: JSON.stringify({ title, description, tag }),
       });
-    
+  
       const json = await response.json();
-      console.log(json);
-    
-      // Update the note in the state
-      const updatedNotes = notes.map((note) =>
-        note._id === id ? { ...note, title, description, tag } : note
-      );
-      setNotes(updatedNotes);
-    };
-    
-
-    // Logic to update in client
-    const updatedNotes = notes.map((note) => {
-      if (note._id === id) {
-        return { ...note, title, description, tag };
+  
+      if (response.ok) {
+        // Update the note in the state
+        const updatedNotes = notes.map((note) =>
+          note._id === id ? json.note : note
+        );
+        setNotes(updatedNotes);
+        console.log("Note updated successfully on both frontend and backend.");
+      } else {
+        console.error("Failed to update note on the backend:", json);
       }
-      return note;
-    });
-    setNotes(updatedNotes);
+    } catch (error) {
+      console.error("Error updating note:", error);
+    }
   };
+  
 
   return (
     <>
