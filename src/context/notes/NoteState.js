@@ -2,116 +2,94 @@ import React, { useState } from "react";
 import NoteContext from "./noteContext";
 
 const NoteState = (props) => {
-  const notesInitial = [
-    {
-      "_id": "673dff463a450c2a39587017",
-      "user": "673d7d11d9f5e07feee46d68",
-      "title": "My Title",
-      "description": "Please wake up early",
-      "tag": "personal",
-      "date": "2024-11-20T15:24:54.562Z",
-      "__v": 0
-    },
-      {
-        "_id": "673dff463a1450c2a39587017",
-        "user": "673d7d11d9f5e07feee46d68",
-        "title": "My Title",
-        "description": "Please wake up early",
-        "tag": "personal",
-        "date": "2024-11-20T15:24:54.562Z",
-        "__v": 0
-      },
-      {
-        "_id": "673dff473a450c12a39587019",
-        "user": "673d7d11d9f5e07feee46d68",
-        "title": "My Title",
-        "description": "Please wake up early",
-        "tag": "personal",
-        "date": "2024-11-20T15:24:55.461Z",
-        "__v": 0
-      },
-      {
-        "_id": "673dff4613a450c2a39587017",
-        "user": "673d7d11d9f5e07feee46d68",
-        "title": "My Title",
-        "description": "Please wake up early",
-        "tag": "personal",
-        "date": "2024-11-20T15:24:54.562Z",
-        "__v": 0
-      },
-      {
-        "_id": "673dff463a450c2a395817017",
-        "user": "673d7d11d9f5e07feee46d68",
-        "title": "My Title",
-        "description": "Please wake up early",
-        "tag": "personal",
-        "date": "2024-11-20T15:24:54.562Z",
-        "__v": 0
-      },
-      {
-        "_id": "673d1ff473a450c2a39587019",
-        "user": "673d7d11d9f5e07feee46d68",
-        "title": "My Title",
-        "description": "Please wake up early",
-        "tag": "personal",
-        "date": "2024-11-20T15:24:55.461Z",
-        "__v": 0
-      },
-      {
-        "_id": "673dff463a4510c2a39587017",
-        "user": "673d7d11d9f5e07feee46d68",
-        "title": "My Title",
-        "description": "Please wake up early",
-        "tag": "personal",
-        "date": "2024-11-20T15:24:54.562Z",
-        "__v": 0
-      },
-      {
-        "_id": "673df1f463a450c2a39587017",
-        "user": "673d7d11d9f5e07feee46d68",
-        "title": "My Title",
-        "description": "Please wake up early",
-        "tag": "personal",
-        "date": "2024-11-20T15:24:54.562Z",
-        "__v": 0
-      },
-    ]
+  const host = "http://localhost:5000";
+  const notesInitial = [];
 
-    const [notes, setNotes] = useState(notesInitial);
+  const [notes, setNotes] = useState(notesInitial);
 
-    // MARK: ADD a Note 
-      const addNote = (title, description, tag)=>{
-        // TODO: API call
-        console.log("Adding a new note")
-        const note = {
-          "_id": "673df1f463a450c2a39587017",
-          "user": "673d7d11d9f5e07feee46d684",
-          "title": title,
-          "description": description,
-          "tag": tag,
-          "date": "2024-11-20T15:24:54.562Z",
-          "__v": 0
-        };  
-        setNotes(notes.concat(note))
+  // MARK: Get all Notes
+  const getNotes = async () => {
+    // API Call
+    const responce = await fetch(`${host}/api/notes/fetchallnotes`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjczZDdkMTFkOWY1ZTA3ZmVlZTQ2ZDY4In0sImlhdCI6MTczMjExMTIwM30.PjqMu34sNQJwoLl4G3AzzlCZTcQ0aHhMdSqf0WV62tU",
+      },
+    });
+    const json = await responce.json();
+    console.log(json);
+    setNotes(json)
+  };
 
+  // MARK: ADD a Note
+  const addNote = async (title, description, tag) => {
+    // TODO: API call
+    // API Call
+    const responce = await fetch(`${host}/api/notes/addnote`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjczZDdkMTFkOWY1ZTA3ZmVlZTQ2ZDY4In0sImlhdCI6MTczMjExMTIwM30.PjqMu34sNQJwoLl4G3AzzlCZTcQ0aHhMdSqf0WV62tU",
+      },
+      body: JSON.stringify({ title, description, tag }),
+    });
+
+    console.log("Adding a new note");
+    const note = {
+      _id: "673df1f463a450c2a39587017",
+      user: "673d7d11d9f5e07feee46d684",
+      title: title,
+      description: description,
+      tag: tag,
+      date: "2024-11-20T15:24:54.562Z",
+      __v: 0,
+    };
+    setNotes(notes.concat(note));
+  };
+
+  // MARK: DELETE a Note
+  const deleteNote = (id) => {
+    // TODO: API call
+    console.log("Deleting the note with id" + id);
+    const newNotes = notes.filter((note) => {
+      return note._id !== id;
+    });
+    setNotes(newNotes);
+  };
+
+  // MARK: UPDATE a Note
+  const updateNote = async (id, title, description, tag) => {
+    // API Call
+    const responce = await fetch(`${host}/api/notes/updatenote/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjczZDdkMTFkOWY1ZTA3ZmVlZTQ2ZDY4In0sImlhdCI6MTczMjExMTIwM30.PjqMu34sNQJwoLl4G3AzzlCZTcQ0aHhMdSqf0WV62tU",
+      },
+      body: JSON.stringify({ title, description, tag }),
+    });
+    const json = await responce.json();
+    console.log(json);
+
+    // Logic to update in client
+    const updatedNotes = notes.map((note) => {
+      if (note._id === id) {
+        return { ...note, title, description, tag };
       }
-
-    // MARK: DELETE a Note 
-    const deleteNote = (id)=>{
-      // TODO: API call
-      console.log("Deleting the note with id" + id);
-      const newNotes = notes.filter((note)=>{return note._id!==id})
-      setNotes(newNotes)
-    }
-
-    // MARK: UPDATE a Note 
-    const updateNote = (id, title, description, tag)=>{
-          
-    }
+      return note;
+    });
+    setNotes(updatedNotes);
+  };
 
   return (
     <>
-      <NoteContext.Provider value={{notes, addNote, deleteNote, updateNote}}>
+      <NoteContext.Provider
+        value={{ notes, addNote, deleteNote, updateNote, getNotes }}
+      >
         {props.children}
       </NoteContext.Provider>
     </>
