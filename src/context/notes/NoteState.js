@@ -20,7 +20,7 @@ const NoteState = (props) => {
     });
     const json = await responce.json();
     console.log(json);
-    setNotes(json)
+    setNotes(json);
   };
 
   // MARK: ADD a Note
@@ -51,8 +51,19 @@ const NoteState = (props) => {
   };
 
   // MARK: DELETE a Note
-  const deleteNote = (id) => {
+  const deleteNote = async (id) => {
     // TODO: API call
+    const responce = await fetch(`${host}/api/notes/deletenote/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjczZDdkMTFkOWY1ZTA3ZmVlZTQ2ZDY4In0sImlhdCI6MTczMjExMTIwM30.PjqMu34sNQJwoLl4G3AzzlCZTcQ0aHhMdSqf0WV62tU",
+      },
+    });
+    const json = responce.json();
+    console.log(json);
+
     console.log("Deleting the note with id" + id);
     const newNotes = notes.filter((note) => {
       return note._id !== id;
@@ -63,17 +74,26 @@ const NoteState = (props) => {
   // MARK: UPDATE a Note
   const updateNote = async (id, title, description, tag) => {
     // API Call
-    const responce = await fetch(`${host}/api/notes/updatenote/${id}`, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjczZDdkMTFkOWY1ZTA3ZmVlZTQ2ZDY4In0sImlhdCI6MTczMjExMTIwM30.PjqMu34sNQJwoLl4G3AzzlCZTcQ0aHhMdSqf0WV62tU",
-      },
-      body: JSON.stringify({ title, description, tag }),
-    });
-    const json = await responce.json();
-    console.log(json);
+    const updateNote = async (id, title, description, tag) => {
+      const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
+        method: "PUT", // Use PUT for updating
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjczZDdkMTFkOWY1ZTA3ZmVlZTQ2ZDY4In0sImlhdCI6MTczMjExMTIwM30.PjqMu34sNQJwoLl4G3AzzlCZTcQ0aHhMdSqf0WV62tU",
+        },
+        body: JSON.stringify({ title, description, tag }),
+      });
+    
+      const json = await response.json();
+      console.log(json);
+    
+      // Update the note in the state
+      const updatedNotes = notes.map((note) =>
+        note._id === id ? { ...note, title, description, tag } : note
+      );
+      setNotes(updatedNotes);
+    };
+    
 
     // Logic to update in client
     const updatedNotes = notes.map((note) => {
