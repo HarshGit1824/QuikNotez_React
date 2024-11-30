@@ -3,7 +3,7 @@ import noteContext from "../context/notes/noteContext";
 import Noteitem from "./Noteitem";
 import AddNote from "./AddNote";
 
-const Notes = () => {
+const Notes = (props) => {
   const context = useContext(noteContext);
   const { notes, getNotes, updateNote } = context; // Use updateNote instead of editNote
 
@@ -22,19 +22,21 @@ const Notes = () => {
   }, []);
 
   const openUpdateModal = (currentNote) => {
+    ref.current.click();
     setNote({
       id: currentNote._id,
       title: currentNote.title,
       description: currentNote.description,
       tag: currentNote.tag,
     });
-    ref.current.click();
+    props.showAlert("Updated Successfully", "success");
   };
 
   const handleClick = (e) => {
     e.preventDefault();
     updateNote(note.id, note.title, note.description, note.tag); // Calls updated function
     refClose.current.click(); // Closes the modal after updating
+    props.showAlert("Updated Successfully", "success");
   };
 
   const onChange = (e) => {
@@ -43,7 +45,7 @@ const Notes = () => {
 
   return (
     <>
-      <AddNote />
+      <AddNote showAlert={props.showAlert} />
       {/* Hidden button to trigger modal */}
       <button
         ref={ref}
@@ -152,7 +154,12 @@ const Notes = () => {
           {notes.length === 0 && "No Notes to Display"}
         </div>
         {notes.map((note) => (
-          <Noteitem key={note._id} updateNote={openUpdateModal} note={note} />
+          <Noteitem
+            key={note._id}
+            updateNote={openUpdateModal}
+            showAlert={props.showAlert}
+            note={note}
+          />
         ))}
       </div>
     </>
