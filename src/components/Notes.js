@@ -36,7 +36,6 @@ const Notes = () => {
     updateNote(note.id, note.title, note.description, note.tag); // Calls updated function
     refClose.current.click(); // Closes the modal after updating
   };
-  
 
   const onChange = (e) => {
     setNote({ ...note, [e.target.name]: e.target.value });
@@ -90,6 +89,8 @@ const Notes = () => {
                     name="title"
                     value={note.title}
                     onChange={onChange}
+                    minLength={5}
+                    required
                   />
                 </div>
                 <div className="mb-3">
@@ -103,6 +104,8 @@ const Notes = () => {
                     rows="3"
                     value={note.description}
                     onChange={onChange}
+                    minLength={5}
+                    required
                   ></textarea>
                 </div>
                 <div className="mb-3">
@@ -130,6 +133,7 @@ const Notes = () => {
                 Close
               </button>
               <button
+                disabled={note.title.length < 5 || note.description.length < 5}
                 type="button"
                 className="btn btn-primary"
                 onClick={handleClick}
@@ -144,6 +148,9 @@ const Notes = () => {
       {/* Notes List */}
       <div className="row my-3">
         <h2>Your Notes</h2>
+        <div className="container mx-2">
+          {notes.length === 0 && "No Notes to Display"}
+        </div>
         {notes.map((note) => (
           <Noteitem key={note._id} updateNote={openUpdateModal} note={note} />
         ))}
@@ -153,4 +160,3 @@ const Notes = () => {
 };
 
 export default Notes;
-

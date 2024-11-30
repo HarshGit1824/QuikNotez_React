@@ -87,9 +87,9 @@ const NoteState = (props) => {
         },
         body: JSON.stringify({ title, description, tag }),
       });
-  
+
       const json = await response.json();
-  
+
       if (response.ok) {
         // Update the note in the state
         const updatedNotes = notes.map((note) =>
@@ -104,7 +104,6 @@ const NoteState = (props) => {
       console.error("Error updating note:", error);
     }
   };
-  
 
   return (
     <>
