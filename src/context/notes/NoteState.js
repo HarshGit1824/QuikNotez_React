@@ -8,19 +8,48 @@ const NoteState = (props) => {
   const [notes, setNotes] = useState(notesInitial);
 
   // MARK: Get all Notes
+  // const getNotes = async () => {
+  //   // API Call
+  //   const responce = await fetch(`${host}/api/notes/fetchallnotes`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-type": "application/json",
+  //       "auth-token":
+  //         localStorage.getItem('token')
+  //     },
+  //   });
+  //   const json = await responce.json();
+  //   console.log(json);
+  //   setNotes(json);
+  // };
+
   const getNotes = async () => {
-    // API Call
-    const responce = await fetch(`${host}/api/notes/fetchallnotes`, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjczZDdkMTFkOWY1ZTA3ZmVlZTQ2ZDY4In0sImlhdCI6MTczMjExMTIwM30.PjqMu34sNQJwoLl4G3AzzlCZTcQ0aHhMdSqf0WV62tU",
-      },
-    });
-    const json = await responce.json();
-    console.log(json);
-    setNotes(json);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("Token not found. User might not be logged in.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${host}/api/notes/fetchallnotes`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": token,
+        },
+      });
+
+      if (!response.ok) {
+        console.error("Failed to fetch notes:", response.statusText);
+        return;
+      }
+
+      const json = await response.json();
+      console.log(json)
+      setNotes(json); // Assuming the API returns an array
+    } catch (error) {
+      console.error("Error while fetching notes:", error);
+    }
   };
 
   // MARK: ADD a Note
@@ -31,8 +60,7 @@ const NoteState = (props) => {
       method: "POST",
       headers: {
         "Content-type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjczZDdkMTFkOWY1ZTA3ZmVlZTQ2ZDY4In0sImlhdCI6MTczMjExMTIwM30.PjqMu34sNQJwoLl4G3AzzlCZTcQ0aHhMdSqf0WV62tU",
+        "auth-token": localStorage.getItem("token"),
       },
       body: JSON.stringify({ title, description, tag }),
     });
@@ -60,8 +88,7 @@ const NoteState = (props) => {
       method: "DELETE",
       headers: {
         "Content-type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjczZDdkMTFkOWY1ZTA3ZmVlZTQ2ZDY4In0sImlhdCI6MTczMjExMTIwM30.PjqMu34sNQJwoLl4G3AzzlCZTcQ0aHhMdSqf0WV62tU",
+        "auth-token": localStorage.getItem("token"),
       },
     });
     const json = responce.json();
@@ -82,8 +109,7 @@ const NoteState = (props) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "auth-token":
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjczZDdkMTFkOWY1ZTA3ZmVlZTQ2ZDY4In0sImlhdCI6MTczMjExMTIwM30.PjqMu34sNQJwoLl4G3AzzlCZTcQ0aHhMdSqf0WV62tU",
+          "auth-token": localStorage.getItem("token"),
         },
         body: JSON.stringify({ title, description, tag }),
       });

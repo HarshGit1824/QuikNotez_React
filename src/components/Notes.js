@@ -2,9 +2,11 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import noteContext from "../context/notes/noteContext";
 import Noteitem from "./Noteitem";
 import AddNote from "./AddNote";
+import { useNavigate } from "react-router-dom";
 
 const Notes = (props) => {
   const context = useContext(noteContext);
+  let navigate = useNavigate();
   const { notes, getNotes, updateNote } = context; // Use updateNote instead of editNote
 
   const ref = useRef(null); // For modal trigger
@@ -16,10 +18,25 @@ const Notes = (props) => {
     tag: "",
   });
 
+  // useEffect(() => {
+  //   if (localStorage.getItem("token")) {
+  //     getNotes();
+  //   } else {
+  //     navigate("/login");
+  //   }
+  //   getNotes();
+  //   // eslint-disable-next-line
+  // }, []);
+
   useEffect(() => {
-    getNotes();
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    } else {
+      getNotes();
+    }
     // eslint-disable-next-line
   }, []);
+  
 
   const openUpdateModal = (currentNote) => {
     ref.current.click();
@@ -148,7 +165,7 @@ const Notes = (props) => {
       </div>
 
       {/* Notes List */}
-      <div className="row my-3">
+      {/* <div className="row my-3">
         <h2>Your Notes</h2>
         <div className="container mx-2">
           {notes.length === 0 && "No Notes to Display"}
@@ -161,6 +178,23 @@ const Notes = (props) => {
             note={note}
           />
         ))}
+      </div> */}
+
+      <div className="row my-3">
+        <h2>Your Notes</h2>
+        <div className="container mx-2">
+          {(!Array.isArray(notes) || notes.length === 0) &&
+            "No Notes to Display"}
+        </div>
+        {Array.isArray(notes) &&
+          notes.map((note) => (
+            <Noteitem
+              key={note._id}
+              updateNote={openUpdateModal}
+              showAlert={props.showAlert}
+              note={note}
+            />
+          ))}
       </div>
     </>
   );

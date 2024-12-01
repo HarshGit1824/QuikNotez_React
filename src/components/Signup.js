@@ -30,7 +30,7 @@ const Signup = (props) => {
     if (json.success) {
       // save the auth token and redirect
       localStorage.setItem("token", json.authtoken);
-      navigate("/");
+      navigate("/login");
       props.showAlert("Account Created Successfully", "success");
     } else {
       props.showAlert("Invalid Credentials", "danger");
@@ -41,7 +41,8 @@ const Signup = (props) => {
     setcredentials({ ...credentials, [e.target.name]: e.target.value });
   };
   return (
-    <div className="container">
+    <div className="container mt-2">
+      <h2>Create an account to use QuikNotez</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
